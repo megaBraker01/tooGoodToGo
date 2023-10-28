@@ -31,6 +31,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'email_verified_at',
     ];
 
     /**
@@ -43,7 +44,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
     
-    public function getRecipes()
+    public function recipes()
     {
         return $this->hasMany(Recipe::class);
     }

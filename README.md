@@ -12,7 +12,9 @@ It is an application that allows us to create and manage users and recipes. All 
 5. Rename file __.env.example__ to __.env__ and edit the Data Base connection parameters
 6. **php artisan key:generate**, to Generate APP_KEY
 7. **php artisan migrate --seed**, to generate the migrations and execute the seeders
-8. To try and test the application go to the route: [http://yourdomain_name/api/documentation](http://localhost/api/documentation)
+8. go to **app/Http/Controller/Controller.php** and change the anotation @OA\Server(url) to the value http://yourdomain_name (http://127.0.0.1:8000/)
+9. **php artisan serve** to run the application
+10. To try and test the application go to the route: [http://yourdomain_name/api/documentation](http://localhost/api/documentation)
 
 ## API Documentation
 

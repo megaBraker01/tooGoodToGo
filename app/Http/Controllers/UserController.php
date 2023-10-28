@@ -4,7 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Response\ApiResponse;
+use Exception;
+use Illuminate\Validation\ValidationException;
 
+
+/**
+ * @OA\Schema(
+ *   schema="User",
+ *   title="User",
+ *   description="User model",
+ *   type="object",
+ *   @OA\Property(property="id", type="number", example="1"),
+ *   @OA\Property(property="name", type="string", example="Jhon Snow"),
+ *   @OA\Property(property="email", type="string", example="jhon_snow@example.org"),
+ *   @OA\Property(property="is_admin", type="number", example="1"),
+ *   @OA\Property(property="created_at", type="string", example="2023-10-23T00:09:16.000000Z"),
+ *   @OA\Property(property="updated_at", type="string", example="2023-10-23T12:33:45.000000Z"),
+ *   example={"id": 25, "name": "Jhon Snow", "email": "jhon_snow@example.org", "id_admin":"0", "created_at": "2023-10-23T00:09:16.000000Z", "updated_at": "2023-10-23T00:10:16.000000Z"}
+ * )
+ * @OA\Schema(
+ *   schema="UserRequest",
+ *   title="UserRequest",
+ *   description="UserRequest model",
+ *   type="object",
+ *   @OA\Property(property="name", type="string", example="Jhon Snow"),
+ *   @OA\Property(property="email", type="string", example="jhon_snow@example.org"),
+ *   @OA\Property(property="password", type="string", example="2_G0od.2-gO"),
+ *   @OA\Property(property="is_admin", type="number", example="1"),
+ *   example={"name": "Jhon Snow", "email": "jhon_snow@example.org", "password":"2_G0od.2-gO", "id_admin":"0"}
+ * )
+ */
 class UserController extends Controller {
     
     /**
@@ -16,38 +46,17 @@ class UserController extends Controller {
      *          response=200,
      *          description="OK",
      *          @OA\JsonContent (
-     *              @OA\Property(
-     *                 type="array",
-     *                 property="rows",
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(
-     *                         property="id",
-     *                         type="number",
-     *                         example="1"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="name",
-     *                         type="string",
-     *                         example="Marilie Jacobs"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="email",
-     *                         type="string",
-     *                         example="marilie_jacobs@example.org"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="created_at",
-     *                         type="string",
-     *                         example="2023-10-23T00:09:16.000000Z"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="updated_at",
-     *                         type="string",
-     *                         example="2023-10-23T12:33:45.000000Z"
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponse"),
+     *                  @OA\Schema (
+     *                      @OA\Property(
+     *                          type="array",
+     *                          property="data",
+     *                          @OA\Items(ref="#/components/schemas/User")
      *                     )
-     *                 )
-     *             )
+     *                  )
+     *              }
      *          )
      *      )
      * )
@@ -55,11 +64,14 @@ class UserController extends Controller {
      */
     public function index()
     {
-        $users = User::all();
-        
-        return response()->json([
-            'rows' => $users,
-        ]);
+        try {
+            $users = User::all();
+            
+            return ApiResponse::success($users);
+            
+        } catch (Exception $e) {
+            return ApiResponse::error();
+        }
     }
     
     /**
@@ -70,73 +82,69 @@ class UserController extends Controller {
      *      @OA\RequestBody (
      *          @OA\MediaType (
      *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  @OA\Property (
-     *                      type="object",
-     *                      @OA\Property(
-     *                         property="name",
-     *                         type="string",
-     *                         example="Brad Champlin"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="email",
-     *                         type="string",
-     *                         example="brad_champlin@example.net"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="password",
-     *                         type="string",
-     *                         example="D$5f_4fa.E"
-     *                     )
-     *                  ),
-     *                 example={
-     *                     "name": "Brad Champlin",
-     *                     "email": "brad_champlin@example.net",
-     *                     "password": "D$5f_4fa.E" 
-     *                }
-     *              )
+     *              @OA\Schema(ref="#/components/schemas/UserRequest")
      *          )
      *      ),
      *      @OA\Response (
      *          response=201,
      *          description="CREATED",
      *          @OA\JsonContent (
-     *              @OA\Property(property="id", type="number", example="1"),
-     *              @OA\Property(property="name", type="string", example="Brad Champlin"),
-     *              @OA\Property(property="email", type="string", example="brad_champlin@example.net"),
-     *              @OA\Property(property="created_at", type="string", example="2023-10-23T00:09:16.000000Z"),
-    *               @OA\Property(property="updated_at", type="string", example="2023-10-23T12:33:45.000000Z")
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponse"),
+     *                  @OA\Schema (
+     *                      @OA\Property(
+     *                          type="array",
+     *                          property="data",
+     *                          @OA\Items(ref="#/components/schemas/User")
+     *                     )
+     *                  )
+     *              }
      *          )
      *      ),
      *      @OA\Response(
      *          response=422,
      *          description="UNPROCESSABLE CONTENT",
      *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="The name field is required."),
-     *              @OA\Property(property="errors", type="string", example="Error Object"),
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponseError"),
+     *              }
      *          )
      *      )
      * )
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required',
+                'email' => 'required|unique:users',
+                'password' => 'required',
+            ]);
+
+            $user = new User;
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = $request->password;
+            $user->save();
+            
+            return ApiResponse::success($user);
+            
+        } catch (ValidationException $ve) {
+            
+            $errors = $ve->validator->errors()->toArray();
+            return ApiResponse::error($errors, $ve->getMessage(), 402);
+            
+        } catch (Exception $e) {
+            return ApiResponse::error();
+        }
+
         
-        $user = new User;
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        $user->save();
-        
-        return $user;
     }
     
     /**
-     * Get by id the information for a specific user
+     * Get by id the information for a specific user,  and also display the information of their recipes.
      * @OA\Get (
      *      path="/api/users/{id}",
      *      tags={"Users"},
@@ -150,43 +158,27 @@ class UserController extends Controller {
      *          response=200,
      *          description="OK",
      *          @OA\JsonContent (
-     *              @OA\Property(
-     *                  property="id",
-     *                  type="number",
-     *                  example="1"
-     *              ),
-     *               @OA\Property(
-     *                  property="name",
-     *                  type="string",
-     *                  example="Marilie Jacobs"
-     *               ),
-     *               @OA\Property(
-     *                   property="email",
-     *                   type="string",
-     *                   example="marilie_jacobs@example.org"
-     *               ),
-     *              @OA\Property(
-     *                   property="email_verified_at",
-     *                   type="string",
-     *                   example="2023-10-24T00:09:16.000000Z"
-     *               ),
-     *               @OA\Property(
-     *                   property="created_at",
-     *                   type="string",
-     *                   example="2023-10-23T00:09:16.000000Z"
-     *               ),
-     *               @OA\Property(
-     *                   property="updated_at",
-     *                   type="string",
-     *                   example="2023-10-23T12:33:45.000000Z"
-     *               )
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponse"),
+     *                  @OA\Schema (
+     *                      @OA\Property(
+     *                          type="array",
+     *                          property="data",
+     *                          @OA\Items(ref="#/components/schemas/User")
+     *                     )
+     *                  )
+     *              }
      *          )
      *      ),
      *      @OA\Response (
      *          response=404,
      *          description="NOT FOUND",
      *          @OA\JsonContent (
-     *              @OA\Property(property="message", type="string", example="resource not found")
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponseError"),
+     *              }
      *          )
      *      )
      * )
@@ -194,12 +186,22 @@ class UserController extends Controller {
      */
     public function show($id)
     {
-        $user = User::find($id);
+        try {
+            $user = User::with('recipes')->find($id);
         
-        if(is_null($user)) {
-           return  response()->json(['message' => 'resource not found'], 404);
+            if(is_null($user)) {
+               return ApiResponse::error(null, 'not found', 404);
+            }
+            
+            return ApiResponse::success($user);
+            
+        } catch (Exception $e) {
+            return ApiResponse::error();
         }
+    }
+    
+    public function favorite_recipes($id)
+    {
         
-        return $user;
     }
 }

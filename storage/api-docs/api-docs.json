@@ -24,49 +24,23 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "success"
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponse"
                                         },
-                                        "statusCode": {
-                                            "type": "number",
-                                            "example": "200"
-                                        },
-                                        "error": {
-                                            "type": "boolean",
-                                            "example": "false"
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "number",
-                                                        "example": "1"
-                                                    },
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "pizza"
-                                                    },
-                                                    "user_id": {
-                                                        "type": "number",
-                                                        "example": "5"
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "example": "2023-10-23T00:09:16.000000Z"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "example": "2023-10-23T12:33:45.000000Z"
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Recipe"
                                                     }
-                                                },
-                                                "type": "object"
-                                            }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
@@ -83,26 +57,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "": {
-                                        "properties": {
-                                            "name": {
-                                                "type": "string",
-                                                "example": "pizza"
-                                            },
-                                            "user_id": {
-                                                "type": "number",
-                                                "example": 5
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                },
-                                "type": "object",
-                                "example": {
-                                    "name": "Pizza",
-                                    "user_id": "1"
-                                }
+                                "$ref": "#/components/schemas/RecipeRequest"
                             }
                         }
                     }
@@ -113,49 +68,20 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "success"
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponse"
                                         },
-                                        "statusCode": {
-                                            "type": "number",
-                                            "example": "200"
-                                        },
-                                        "error": {
-                                            "type": "boolean",
-                                            "example": "false"
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "number",
-                                                        "example": "1"
-                                                    },
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "pizza"
-                                                    },
-                                                    "user_id": {
-                                                        "type": "number",
-                                                        "example": "5"
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "example": "2023-10-23T00:09:16.000000Z"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "example": "2023-10-23T12:33:45.000000Z"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/Recipe"
+                                                }
+                                            },
+                                            "type": "object"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
@@ -165,17 +91,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The name field is required."
-                                        },
-                                        "errors": {
-                                            "type": "string",
-                                            "example": "Error Object"
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponseError"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
@@ -188,7 +109,7 @@
                 "tags": [
                     "Recipes"
                 ],
-                "summary": "Get by id the information for a specific recipe",
+                "summary": "Get by id the information for a specific recipe, and also display the information of its ingredients.",
                 "operationId": "494913cea16e9bd1ed0d3a25eda1b1f0",
                 "parameters": [
                     {
@@ -206,29 +127,20 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "number",
-                                            "example": "1"
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponse"
                                         },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "pizza"
-                                        },
-                                        "user_id": {
-                                            "type": "number",
-                                            "example": "5"
-                                        },
-                                        "created_at": {
-                                            "type": "string",
-                                            "example": "2023-10-23T00:09:16.000000Z"
-                                        },
-                                        "updated_at": {
-                                            "type": "string",
-                                            "example": "2023-10-23T12:33:45.000000Z"
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/Recipe"
+                                                }
+                                            },
+                                            "type": "object"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
@@ -238,13 +150,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "resource not found"
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponseError"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
@@ -271,24 +182,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "": {
-                                        "properties": {
-                                            "name": {
-                                                "type": "string"
-                                            },
-                                            "user_id": {
-                                                "type": "number"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                },
-                                "type": "object",
-                                "example": {
-                                    "name": "Hawaiian Pizza",
-                                    "user_id": "1"
-                                }
+                                "$ref": "#/components/schemas/RecipeRequest"
                             }
                         }
                     }
@@ -299,29 +193,20 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "number",
-                                            "example": 1
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponse"
                                         },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "Hawaiian Pizza"
-                                        },
-                                        "user_id": {
-                                            "type": "number",
-                                            "example": 1
-                                        },
-                                        "created_at": {
-                                            "type": "string",
-                                            "example": "2023-10-23T00:09:16.000000Z"
-                                        },
-                                        "updated_at": {
-                                            "type": "string",
-                                            "example": "2023-10-23T12:33:45.000000Z"
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/Recipe"
+                                                }
+                                            },
+                                            "type": "object"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
@@ -331,17 +216,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The apellidos field is required."
-                                        },
-                                        "errors": {
-                                            "type": "string",
-                                            "example": "Objeto de errores"
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponseError"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
@@ -370,13 +250,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "resource deleted successfully"
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponse"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
@@ -386,13 +265,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "resource not found"
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponseError"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
@@ -413,37 +291,23 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "rows": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "number",
-                                                        "example": "1"
-                                                    },
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "Marilie Jacobs"
-                                                    },
-                                                    "email": {
-                                                        "type": "string",
-                                                        "example": "marilie_jacobs@example.org"
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "example": "2023-10-23T00:09:16.000000Z"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "example": "2023-10-23T12:33:45.000000Z"
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponse"
+                                        },
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/User"
                                                     }
-                                                },
-                                                "type": "object"
-                                            }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
@@ -460,31 +324,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "": {
-                                        "properties": {
-                                            "name": {
-                                                "type": "string",
-                                                "example": "Brad Champlin"
-                                            },
-                                            "email": {
-                                                "type": "string",
-                                                "example": "brad_champlin@example.net"
-                                            },
-                                            "password": {
-                                                "type": "string",
-                                                "example": "D$5f_4fa.E"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                },
-                                "type": "object",
-                                "example": {
-                                    "name": "Brad Champlin",
-                                    "email": "brad_champlin@example.net",
-                                    "password": "D$5f_4fa.E"
-                                }
+                                "$ref": "#/components/schemas/UserRequest"
                             }
                         }
                     }
@@ -495,29 +335,23 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "number",
-                                            "example": "1"
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponse"
                                         },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "Brad Champlin"
-                                        },
-                                        "email": {
-                                            "type": "string",
-                                            "example": "brad_champlin@example.net"
-                                        },
-                                        "created_at": {
-                                            "type": "string",
-                                            "example": "2023-10-23T00:09:16.000000Z"
-                                        },
-                                        "updated_at": {
-                                            "type": "string",
-                                            "example": "2023-10-23T12:33:45.000000Z"
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/User"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
@@ -527,17 +361,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The name field is required."
-                                        },
-                                        "errors": {
-                                            "type": "string",
-                                            "example": "Error Object"
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponseError"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
@@ -550,7 +379,7 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Get by id the information for a specific user",
+                "summary": "Get by id the information for a specific user,  and also display the information of their recipes.",
                 "operationId": "36a33ff774d5cba33c039dec2c3e0287",
                 "parameters": [
                     {
@@ -568,33 +397,23 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "number",
-                                            "example": "1"
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponse"
                                         },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "Marilie Jacobs"
-                                        },
-                                        "email": {
-                                            "type": "string",
-                                            "example": "marilie_jacobs@example.org"
-                                        },
-                                        "email_verified_at": {
-                                            "type": "string",
-                                            "example": "2023-10-24T00:09:16.000000Z"
-                                        },
-                                        "created_at": {
-                                            "type": "string",
-                                            "example": "2023-10-23T00:09:16.000000Z"
-                                        },
-                                        "updated_at": {
-                                            "type": "string",
-                                            "example": "2023-10-23T12:33:45.000000Z"
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/User"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
@@ -604,17 +423,199 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "resource not found"
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiResponseError"
                                         }
-                                    },
-                                    "type": "object"
+                                    ]
                                 }
                             }
                         }
                     }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Recipe": {
+                "title": "Recipe",
+                "description": "Recipe model",
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "pizza"
+                    },
+                    "user_id": {
+                        "type": "number",
+                        "example": "5"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2023-10-23T00:09:16.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2023-10-23T12:33:45.000000Z"
+                    }
+                },
+                "type": "object",
+                "example": {
+                    "id": 25,
+                    "name": "Pizza",
+                    "user_id": "6",
+                    "created_at": "2023-10-23T00:09:16.000000Z",
+                    "updated_at": "2023-10-23T00:10:16.000000Z"
+                }
+            },
+            "RecipeRequest": {
+                "title": "RecipeRequest",
+                "description": "Recipe Request Model",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "pizza"
+                    },
+                    "user_id": {
+                        "type": "number",
+                        "example": "5"
+                    }
+                },
+                "type": "object",
+                "example": {
+                    "name": "Pizza",
+                    "user_id": "6"
+                }
+            },
+            "User": {
+                "title": "User",
+                "description": "User model",
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Jhon Snow"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "jhon_snow@example.org"
+                    },
+                    "is_admin": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2023-10-23T00:09:16.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2023-10-23T12:33:45.000000Z"
+                    }
+                },
+                "type": "object",
+                "example": {
+                    "id": 25,
+                    "name": "Jhon Snow",
+                    "email": "jhon_snow@example.org",
+                    "id_admin": "0",
+                    "created_at": "2023-10-23T00:09:16.000000Z",
+                    "updated_at": "2023-10-23T00:10:16.000000Z"
+                }
+            },
+            "UserRequest": {
+                "title": "UserRequest",
+                "description": "UserRequest model",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Jhon Snow"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "jhon_snow@example.org"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "2_G0od.2-gO"
+                    },
+                    "is_admin": {
+                        "type": "number",
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "example": {
+                    "name": "Jhon Snow",
+                    "email": "jhon_snow@example.org",
+                    "password": "2_G0od.2-gO",
+                    "id_admin": "0"
+                }
+            },
+            "ApiResponse": {
+                "title": "ApiResponse",
+                "description": "ApiResponse model",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "status_code": {
+                        "type": "number",
+                        "example": "200"
+                    },
+                    "errors": {
+                        "type": "boolean",
+                        "example": "false"
+                    },
+                    "data": {
+                        "type": "array|object",
+                        "example": "[]|{}"
+                    }
+                },
+                "type": "object",
+                "example": {
+                    "message": "success",
+                    "status_code": 200,
+                    "errors": false,
+                    "data": "[]|{}"
+                }
+            },
+            "ApiResponseError": {
+                "title": "ApiResponseError",
+                "description": "ApiResponseError model",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "error"
+                    },
+                    "status_code": {
+                        "type": "number",
+                        "example": "400"
+                    },
+                    "errors": {
+                        "type": "boolean",
+                        "example": "true"
+                    },
+                    "data": {
+                        "type": "array|object",
+                        "example": "[]|{}"
+                    }
+                },
+                "type": "object",
+                "example": {
+                    "message": "error",
+                    "status_code": 400,
+                    "errors": true,
+                    "data": "[]|{}"
                 }
             }
         }

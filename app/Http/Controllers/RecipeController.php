@@ -5,16 +5,34 @@ namespace App\Http\Controllers;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
 use App\Http\Response\ApiResponse;
+use Exception;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rule;
 
 /**
-* @OA\Info(
-*   title="Too Good To Go API", 
-*   version="1.0",
-*   description="It is an application that allows us to create and manage users and recipes. All users will be able to search for all recipes, they will be able to create and update their own recipes, they will be able to add and delete favorite recipes and they will also be able to see other users' recipes."
-* )
-*
-* @OA\Server(url="http://toogoodtogo.test:8080")
-*/
+ * @OA\Schema(
+ *   schema="Recipe",
+ *   title="Recipe",
+ *   description="Recipe model",
+ *   type="object",
+ *   @OA\Property(property="id", type="number", example="1"),
+ *   @OA\Property(property="name", type="string", example="pizza"),
+ *   @OA\Property(property="user_id", type="number", example="5"),
+ *   @OA\Property(property="created_at", type="string", example="2023-10-23T00:09:16.000000Z"),
+ *   @OA\Property(property="updated_at", type="string", example="2023-10-23T12:33:45.000000Z"),
+ *   example={"id": 25, "name": "Pizza", "user_id": "6", "created_at": "2023-10-23T00:09:16.000000Z", "updated_at": "2023-10-23T00:10:16.000000Z"}
+ * )
+ * 
+ * @OA\Schema (
+ *      schema="RecipeRequest",
+ *      title="RecipeRequest",
+ *      description="Recipe Request Model",
+ *      type="object",
+ *      @OA\Property(property="name", type="string", example="pizza"),
+ *      @OA\Property(property="user_id", type="number", example="5"),
+ *      example={"name": "Pizza", "user_id": "6"}
+ * )
+ */
 class RecipeController extends Controller
 {
     /**
@@ -26,21 +44,17 @@ class RecipeController extends Controller
      *          response=200,
      *          description="OK",
      *          @OA\JsonContent (
-     *              @OA\Property (property="message", type="string", example="success"),
-     *              @OA\Property (property="statusCode", type="number", example="200"),
-     *              @OA\Property (property="error", type="boolean", example="false"),
-     *              @OA\Property(
-     *                 type="array",
-     *                 property="data",
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(property="id", type="number", example="1"),
-     *                     @OA\Property(property="name", type="string", example="pizza"),
-     *                     @OA\Property(property="user_id", type="number", example="5"),
-     *                     @OA\Property(property="created_at", type="string", example="2023-10-23T00:09:16.000000Z"),
-    *                     @OA\Property(property="updated_at", type="string", example="2023-10-23T12:33:45.000000Z")
-     *                 )
-     *             )
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponse"),
+     *                  @OA\Schema (
+     *                      @OA\Property(
+     *                          type="array",
+     *                          property="data",
+     *                          @OA\Items(ref="#/components/schemas/Recipe")
+     *                     )
+     *                  )
+     *              }
      *          )
      *      )
      * )
@@ -52,6 +66,7 @@ class RecipeController extends Controller
             $recipes = Recipe::all();
             
             return ApiResponse::success($recipes);
+            
         } catch (Exception $e) {
             return ApiResponse::error();
         }
@@ -65,75 +80,65 @@ class RecipeController extends Controller
      *      @OA\RequestBody (
      *          @OA\MediaType (
      *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  @OA\Property (
-     *                      type="object",
-     *                      @OA\Property(
-     *                         property="name",
-     *                         type="string",
-     *                         example="pizza"
-     *                     ),
-     *                     @OA\Property(
-     *                         property="user_id",
-     *                         type="number",
-     *                         example=5
-     *                     )
-     *                  ),
-     *                 example={
-     *                     "name": "Pizza",
-     *                     "user_id": "1"
-     *                }
-     *              )
+     *              @OA\Schema(ref="#/components/schemas/RecipeRequest")
      *          )
      *      ),
      *      @OA\Response (
      *          response=201,
      *          description="CREATED",
      *          @OA\JsonContent (
-     *              @OA\Property (property="message", type="string", example="success"),
-     *              @OA\Property (property="statusCode", type="number", example="200"),
-     *              @OA\Property (property="error", type="boolean", example="false"),
-     *              @OA\Property(
-     *                 type="array",
-     *                 property="data",
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(property="id", type="number", example="1"),
-     *                     @OA\Property(property="name", type="string", example="pizza"),
-     *                     @OA\Property(property="user_id", type="number", example="5"),
-     *                     @OA\Property(property="created_at", type="string", example="2023-10-23T00:09:16.000000Z"),
-    *                     @OA\Property(property="updated_at", type="string", example="2023-10-23T12:33:45.000000Z")
-     *                 )
-     *             )
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponse"),
+     *                  @OA\Schema (
+     *                      @OA\Property(
+     *                          type="object",
+     *                          property="data",
+     *                          ref="#/components/schemas/Recipe"
+     *                     )
+     *                  )
+     *              }
      *          )
      *      ),
      *      @OA\Response(
      *          response=422,
      *          description="UNPROCESSABLE CONTENT",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="The name field is required."),
-     *              @OA\Property(property="errors", type="string", example="Error Object"),
+     *          @OA\JsonContent (
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponseError"),
+     *              }
      *          )
      *      )
      * )
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'user_id' => 'required',
-        ]);
-        
-        $recipe = new Recipe;
-        $recipe->name = $request->name;
-        $recipe->user_id = $request->user_id;
-        $recipe->save();
-        
-        return $recipe;
+        try {
+            $request->validate([
+                'name' => 'required|unique:recipes',
+                'user_id' => 'required|exists:users,id',
+            ]);
+
+            $recipe = new Recipe;
+            $recipe->name = $request->name;
+            $recipe->user_id = $request->user_id;
+            $recipe->save();
+            
+            return ApiResponse::success($recipe);
+            
+        } catch (ValidationException $ve) {
+            
+            $errors = $ve->validator->errors()->toArray();
+            return ApiResponse::error($errors, $ve->getMessage(), 402);
+            
+        } catch (Exception $e) {
+            return ApiResponse::error();
+        }
     }
 
     /**
-     * Get by id the information for a specific recipe
+     * Get by id the information for a specific recipe, and also display the information of its ingredients.
      * @OA\Get (
      *      path="/api/recipes/{id}",
      *      tags={"Recipes"},
@@ -147,18 +152,27 @@ class RecipeController extends Controller
      *          response=200,
      *          description="OK",
      *          @OA\JsonContent (
-     *              @OA\Property(property="id", type="number", example="1"),
-     *              @OA\Property(property="name", type="string", example="pizza"),
-     *              @OA\Property(property="user_id", type="number", example="5"),
-     *              @OA\Property(property="created_at", type="string", example="2023-10-23T00:09:16.000000Z"),
-    *               @OA\Property(property="updated_at", type="string", example="2023-10-23T12:33:45.000000Z")
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponse"),
+     *                  @OA\Schema (
+     *                      @OA\Property(
+     *                          type="object",
+     *                          property="data",
+     *                          ref="#/components/schemas/Recipe"
+     *                     )
+     *                  )
+     *              }
      *          )
      *      ),
      *      @OA\Response (
      *          response=404,
      *          description="NOT FOUND",
      *          @OA\JsonContent (
-     *              @OA\Property(property="message", type="string", example="resource not found")
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponseError"),
+     *              }
      *          )
      *      )
      * )
@@ -166,13 +180,18 @@ class RecipeController extends Controller
      */
     public function show($id)
     {
-        $recipe = Recipe::find($id);
+        try {
+            $recipe = Recipe::with('ingredients')->find($id);
         
-        if(is_null($recipe)) {
-           return  response()->json(['message' => 'resource not found'], 404);
+            if(is_null($recipe)) {
+               return ApiResponse::error(null, 'not found', 404);
+            }
+            
+            return ApiResponse::success($recipe);
+            
+        } catch (Exception $e) {
+            return ApiResponse::error(null, $e->getMessage());
         }
-        
-        return $recipe;
     }
 
     /**
@@ -189,58 +208,66 @@ class RecipeController extends Controller
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/json",
-     *             @OA\Schema(
-     *                 @OA\Property(
-     *                      type="object",
-     *                      @OA\Property(
-     *                          property="name",
-     *                          type="string"
-     *                      ),
-     *                      @OA\Property(
-     *                          property="user_id",
-     *                          type="number"
-     *                      )
-     *                 ),
-     *                 example={
-     *                     "name": "Hawaiian Pizza",
-     *                     "user_id": "1"
-     *                }
-     *             )
+     *             @OA\Schema(ref="#/components/schemas/RecipeRequest")
      *         )
      *      ),
      *      @OA\Response(
      *          response=200,
      *          description="success",
      *          @OA\JsonContent(
-     *              @OA\Property(property="id", type="number", example=1),
-     *              @OA\Property(property="name", type="string", example="Hawaiian Pizza"),
-     *              @OA\Property(property="user_id", type="number", example=1),
-     *              @OA\Property(property="created_at", type="string", example="2023-10-23T00:09:16.000000Z"),
-     *              @OA\Property(property="updated_at", type="string", example="2023-10-23T12:33:45.000000Z")
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponse"),
+     *                  @OA\Schema (
+     *                      @OA\Property(
+     *                          type="object",
+     *                          property="data",
+     *                          ref="#/components/schemas/Recipe"
+     *                     )
+     *                  )
+     *              }
      *          )
      *      ),
      *      @OA\Response(
      *          response=422,
      *          description="UNPROCESSABLE CONTENT",
      *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="The apellidos field is required."),
-     *              @OA\Property(property="errors", type="string", example="Objeto de errores"),
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponseError"),
+     *              }
      *          )
      *      )
      * )
      */
-    public function update(Request $request, Recipe $recipe)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'user_id' => 'required',
-        ]);
+        try {
+            $recipe = Recipe::find($id);
+            
+            $request->validate([
+                'name' => ['required', Rule::unique('recipes')->ignore($recipe)],
+                'user_id' => 'required|exists:users,id',
+            ]);
         
-        $recipe->name = $request->name;
-        $recipe->user_id = $request->user_id;
-        $recipe->update();
-        
-        return $recipe;
+            if(is_null($recipe)) {
+               return ApiResponse::error(null, 'not found', 404);
+            }
+
+            $recipe->name = $request->name;
+            $recipe->user_id = $request->user_id;
+            $recipe->update();
+            
+            return ApiResponse::success($recipe);
+            
+        } catch (ValidationException $ve) {
+            
+            $errors = $ve->validator->errors()->toArray();
+            return ApiResponse::error($errors, $ve->getMessage(), 402);
+            
+        } catch (Exception $e) {
+            return ApiResponse::error(null, 'unprocessable content', 422);
+        }
     }
 
     /**
@@ -258,28 +285,58 @@ class RecipeController extends Controller
      *          response=200,
      *          description="OK",
      *          @OA\JsonContent (
-     *              @OA\Property(property="message", type="string", example="resource deleted successfully")
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponse"),
+     *              }
      *          )
      *      ),
      *      @OA\Response (
      *          response=404,
      *          description="NOT FOUND",
      *          @OA\JsonContent (
-     *              @OA\Property(property="message", type="string", example="resource not found")
+     *              type="object",
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/ApiResponseError"),
+     *              }
      *          )
      *      )
      * )
      */
     public function destroy($id)
     {
-        $recipe = Recipe::find($id);
+        try {
+            $recipe = Recipe::find($id);
         
-        if(is_null($recipe)) {
-           return  response()->json(['message' => 'resource not found'], 404);
+            if(is_null($recipe)) {
+               return ApiResponse::error(null, 'not found', 404);
+            }
+
+            $recipe->delete();
+
+            return ApiResponse::success(null, 'task executed successfully');
+            
+        } catch (Exception $e) {
+            return ApiResponse::error();
         }
+    }
+    
+    public function ingredients($id)
+    {
+        try {
+            $recipe = Recipe::find($id);
         
-        $recipe->delete();
-        
-        return response()->json(['message' => 'task executed successfully']);
+            if(is_null($recipe)) {
+               return ApiResponse::error(null, 'not found', 404);
+            }
+            
+            $ingredients = $recipe->getIngredients();
+            //dd($ingredients->getRelations()->toArray());
+            
+            return ApiResponse::success($ingredients);
+            
+        } catch (Exception $exc) {
+            return ApiResponse::error();
+        }
     }
 }
