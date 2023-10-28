@@ -5,7 +5,7 @@ It is an application that allows us to create and manage users and recipes. All 
 
 ## Installation & Configuration ##
 
-1. git clon [https://github.com/megabraker01/toogoodtogo](https://laravel.com/docs/routing).
+1. git clon [https://github.com/megaBraker01/tooGoodToGo.git](https://github.com/megaBraker01/tooGoodToGo.git).
 2. **cd toogoodtogo**
 3. **composer install**
 4. Create the Data Base and name it **toogoodtogo**
