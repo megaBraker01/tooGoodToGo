@@ -127,6 +127,15 @@ class UserController extends Controller {
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = $request->password;
+            
+            /*
+            if($request->hasFile('image')){
+                $image = request('image');
+                $filename = time() . $image->getClientOriginalName();
+                $image->move(public_path() . 'user_img/',$filename);
+                $user->image = $filename;
+           }*/
+            
             $user->save();
             
             return ApiResponse::success($user);

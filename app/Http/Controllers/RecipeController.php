@@ -119,10 +119,19 @@ class RecipeController extends Controller
                 'name' => 'required|unique:recipes',
                 'user_id' => 'required|exists:users,id',
             ]);
-
+            
             $recipe = new Recipe;
             $recipe->name = $request->name;
             $recipe->user_id = $request->user_id;
+            
+            /*
+            if($request->hasFile('image')){
+                $image = request('image');
+                $filename = time() . $image->getClientOriginalName();
+                $image->move(public_path() . 'recipe_img/',$filename);
+                $recipe->image = $filename;
+           }*/
+            
             $recipe->save();
             
             return ApiResponse::success($recipe);
