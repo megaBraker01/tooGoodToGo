@@ -20,20 +20,20 @@ class IngredientFactory extends Factory {
     public function definition(): array
     {
         $ingredient_names = [
-            "Salt","Sugar","Olive Oil","Garlic","Onion",
-            "Flour","Butter","Eggs","Black Pepper","Tomato",
-            "Milk","Rice","Chicken","Beef","Lemon",
-            "Lime","Parsley","Vinegar","Cheese","Sour Cream",
-            "Yogurt","Wheat Flour","Cilantro","Cinnamon","Nutmeg",
-            "Ginger","Red Bell Pepper","Green Bell Pepper","Bay Leaf","Cumin",
-            "Chilies","Soy Sauce","Honey","Mustard","Basil",
-            "Carrots","Celery","Lemon","Chili Powder","Turmeric",
-            "Orange","Thyme","Oregano","Basil","Green Onions",
-            "Cucumber","Swiss Chard","Rosemary","Cloves","Cayenne Pepper",
+            "Salt", "Sugar", "Olive Oil", "Garlic", "Onion", 
+            "Flour", "Butter", "Eggs", "Black Pepper", "Tomato", 
+            "Milk", "Rice", "Chicken", "Beef", "Lemon", 
+            "Lime", "Parsley", "Vinegar", "Cheese", "Sour Cream", 
+            "Yogurt", "Wheat Flour", "Cilantro", "Cinnamon", "Nutmeg", 
+            "Ginger", "Red Bell Pepper", "Green Bell Pepper", "Bay Leaf", "Cumin", 
+            "Chilies", "Soy Sauce", "Honey", "Mustard", "Basil", 
+            "Carrots", "Celery", "Chili Powder", "Turmeric", "Orange", 
+            "Thyme", "Oregano", "Green Onions", "Cucumber", "Swiss Chard", 
+            "Rosemary", "Cloves", "Cayenne Pepper",
         ];
         
         return [
-            'name' => Arr::sort($ingredient_names),
+            'name' => Arr::random($ingredient_names),
         ];
     }
 }
