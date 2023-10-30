@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             IngredientSeeder::class,
             RecipeSeeder::class,
+            IngredientRecipeSeeder::class,
         ]);
     }
 }

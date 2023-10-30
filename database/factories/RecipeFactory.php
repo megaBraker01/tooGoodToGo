@@ -18,7 +18,6 @@ class RecipeFactory extends Factory {
      */
     public function definition(): array
     {
-        $user_id_list = range(1, 10);
         $recipe_names = [
             "Grilled Chicken with Herbs and Lemon.",
             "Spaghetti Bolognese.",
@@ -44,7 +43,7 @@ class RecipeFactory extends Factory {
         
         return [
             'name' => Arr::random($recipe_names),
-            'user_id' => Arr::random($user_id_list),
+            'user_id' => rand(1, 10),
         ];
     }
 }
